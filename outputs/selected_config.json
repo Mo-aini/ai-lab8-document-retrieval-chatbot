@@ -1,0 +1,6 @@
+{
+  "strategy": "0",
+  "backend": "embedding",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "selected_by": "dev MRR@3, then dev Hit@3, then fewer chunks"
+}

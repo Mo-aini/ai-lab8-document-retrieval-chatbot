@@ -1,0 +1,278 @@
+AI Lab 8: Document Retrieval Chatbot Evaluation | Rasikh Ali (42365)
+Python 3.11.6, all-MiniLM-L6-v2 on CPU
+
+========================================================================
+LAB 8 / 6.5  Guided example: Hit@3 and MRR@3
+========================================================================
+Hit@3=0.667; MRR@3=0.500
+Rank-4 case: Hit@3=0.000; MRR@3=0.000
+
+========================================================================
+LAB 8 / 6.4  Guided example: CPU setup and model input limits
+========================================================================
+short | whitespace words: 3 | model tokens: 6 | limit: 256 | fits: True
+long | whitespace words: 300 | model tokens: 302 | limit: 256 | fits: False
+identifier | whitespace words: 3 | model tokens: 23 | limit: 256 | fits: True
+   subwords: ['cs', '##49', '##44', '_', '42', '##36', '##5', '_', 'lab', '##6', '.', 'pdf', 'post', '/', 'v', '##2', '/', 'token', '/', 'ref', '##resh']
+punctuation | whitespace words: 5 | model tokens: 16 | limit: 256 | fits: True
+   subwords: ['wait', '.', '.', '.', 'what', '?', '!', '(', 'really', ')', '-', '-', 'yes', '.']
+
+========================================================================
+LAB 8 / Task  3 chunking strategies x TF-IDF / embeddings
+========================================================================
+Documents: 6 | queries: 10 | answerable dev/test: 4 / 4 | unanswerable: 2
+Model load seconds: 0.169 (measured separately) | max_seq_length: 256 | embedding dim: 384
+
+Token audit [window-40/overlap-0]: 31 chunks, max chunk tokens 65, max query tokens 18, limit 256 -> OK
+  tfidf     dev Hit@3=0.500 MRR@3=0.500 | test Hit@3=0.250 MRR@3=0.125 | encode 0.0043s search 0.000208s
+  embedding dev Hit@3=0.500 MRR@3=0.500 | test Hit@3=0.500 MRR@3=0.208 | encode 0.1169s search 0.000062s
+
+Token audit [window-40/overlap-10]: 39 chunks, max chunk tokens 67, max query tokens 18, limit 256 -> OK
+  tfidf     dev Hit@3=0.250 MRR@3=0.250 | test Hit@3=0.250 MRR@3=0.125 | encode 0.0025s search 0.000161s
+  embedding dev Hit@3=0.250 MRR@3=0.125 | test Hit@3=0.250 MRR@3=0.125 | encode 0.1077s search 0.000046s
+
+Token audit [sentence-40]: 39 chunks, max chunk tokens 65, max query tokens 18, limit 256 -> OK
+  tfidf     dev Hit@3=0.500 MRR@3=0.500 | test Hit@3=0.750 MRR@3=0.417 | encode 0.0024s search 0.000167s
+  embedding dev Hit@3=0.500 MRR@3=0.500 | test Hit@3=1.000 MRR@3=0.875 | encode 0.0912s search 0.000044s
+
+================ RESULTS TABLE ================
+strategy               method    chunks   devHit   devMRR   testHit   testMRR  encode_s   search_s
+window-40/overlap-0    tfidf         31    0.500    0.500     0.250     0.125    0.0043   0.000208
+window-40/overlap-0    embedding     31    0.500    0.500     0.500     0.208    0.1169   0.000062
+window-40/overlap-10   tfidf         39    0.250    0.250     0.250     0.125    0.0025   0.000161
+window-40/overlap-10   embedding     39    0.250    0.125     0.250     0.125    0.1077   0.000046
+sentence-40            tfidf         39    0.500    0.500     0.750     0.417    0.0024   0.000167
+sentence-40            embedding     39    0.500    0.500     1.000     0.875    0.0912   0.000044
+
+Selected on development data: window-40/overlap-0 + embedding (dev Hit@3=0.500, dev MRR@3=0.500).
+Held-out test result, no retuning: Hit@3=0.500, MRR@3=0.208
+
+================ TOP-3 FOR EVERY QUERY (selected config + TF-IDF same chunks) =====
+
+##### window-40/overlap-0 / embedding
+
+Q [dev] What is the penalty for late work, and can illness give me an extension?  (expected: handbook_late)
+  1. handbook_late:0:1 score=0.610 chars 272-514  [RELEVANT]
+     is received. Late submission is penalized at 10% of the marks per day. However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline. Requests that arrive after
+  2. handbook_late_2023:0:2 score=0.548 chars 473-715
+     zero. Students who were ill could apply for an extension within seven days after the deadline by sending a doctor's note to the department office. The department office replied by post or by telephone. Extensions under the archived rules were
+  3. handbook_late_2023:0:1 score=0.520 chars 264-472
+     in the old document library and in some search results. Under the 2023 rules, late work was accepted for up to three days with a deduction of 5% per day, and work submitted after three days received a mark of
+
+Q [dev] How do I reset a forgotten password?  (expected: it_password)
+  1. it_password:0:0 score=0.554 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+  2. it_password:0:2 score=0.391 chars 515-731
+     attempts the account is locked for 15 minutes to protect it from guessing attacks. If the account is still locked after 15 minutes, or if you no longer have access to your personal email, visit the IT service desk in
+  3. it_password:0:1 score=0.384 chars 259-514
+     the link is sent to the personal email address registered during enrolment and expires after 30 minutes. Never share recovery codes, one-time passwords or verification links with anyone, including people who claim to be IT staff. After five failed sign-in
+
+Q [dev] Where do I upload my assignment and which file format is required?  (expected: assignment_submission)
+  1. assignment_submission:0:0 score=0.536 chars 0-278
+     Assignment Submission Guide (synthetic teaching text). All coursework for CS4944 and other computing modules is handed in electronically. Upload assignments through the learning portal by opening the module page and selecting the assignment upload link. Submit the final file as
+  2. handbook_late:0:0 score=0.443 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+  3. assignment_submission:0:1 score=0.433 chars 279-559
+     a single PDF no larger than 20 MB; Word documents, ZIP archives and photographs of handwritten pages are not accepted unless the brief says otherwise. Name the file using the pattern ModuleCode_StudentID_Task, for example CS4944_42365_Lab6.pdf. Source code is submitted separately
+
+Q [dev] Can contractors work remotely?  (expected: remote_work)
+  1. remote_work:0:1 score=0.692 chars 272-517  [RELEVANT]
+     require them to be on campus. Contractors can work remotely only if the signed contract explicitly permits remote work; employee rules do not apply to contractors. A manager cannot approve remote work for a contractor when the contract is silent
+  2. remote_work:0:2 score=0.519 chars 518-784
+     on location. All remote workers must use the university virtual private network and must not store student records on personal devices. Equipment such as laptops and headsets is provided for employees, while contractors supply their own equipment unless the contract
+  3. remote_work:0:0 score=0.510 chars 0-271
+     Workplace Policy: Remote Work (synthetic HR teaching text). This policy applies to employees and contractors who support university administration. Employees may request remote work for up to three days per week with written manager approval, provided their role does not
+
+Q [dev] What is the hostel fee for next semester?  (expected: UNANSWERABLE)
+  1. handbook_late:0:0 score=0.294 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+  2. it_password:0:0 score=0.273 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+  3. handbook_late_2023:0:3 score=0.248 chars 716-950
+     limited to a maximum of ten days, and a second extension for the same assignment was not allowed. Group projects were not eligible for extensions under the 2023 rules. Students who are unsure which version applies to them should check
+
+Q [test] The printer gives me empty pages, what should I do?  (expected: printer_help)
+  1. printer_help:0:1 score=0.711 chars 258-480
+     printer menu, then print a test page afterwards. If the test page is still blank, replace the cartridge and repeat the cleaning utility once. For a paper jam, open the rear tray, remove the paper slowly in the direction of
+  2. printer_help:0:0 score=0.646 chars 0-257
+     Equipment Troubleshooting: Lab Printers and Scanners (synthetic teaching text). Warning: switch the printer off and wait for the fuser to cool before opening any internal panel. For blank printer pages, check ink levels and run the cleaning utility from the
+  3. printer_help:0:3 score=0.550 chars 714-954
+     the automatic document feeder must be selected manually. Do not use printer cleaning steps on a scanner, because the two devices have different hardware. Report any device that shows an error code more than twice to the lab technician using
+
+Q [test] How can I get back into my account if I forgot my login?  (expected: it_password)
+  1. it_password:0:0 score=0.543 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+  2. it_password:0:2 score=0.434 chars 515-731
+     attempts the account is locked for 15 minutes to protect it from guessing attacks. If the account is still locked after 15 minutes, or if you no longer have access to your personal email, visit the IT service desk in
+  3. it_password:0:1 score=0.410 chars 259-514
+     the link is sent to the personal email address registered during enrolment and expires after 30 minutes. Never share recovery codes, one-time passwords or verification links with anyone, including people who claim to be IT staff. After five failed sign-in
+
+Q [test] How should I hand in my coursework?  (expected: assignment_submission)
+  1. handbook_late:0:0 score=0.451 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+  2. assignment_submission:0:0 score=0.426 chars 0-278  [RELEVANT]
+     Assignment Submission Guide (synthetic teaching text). All coursework for CS4944 and other computing modules is handed in electronically. Upload assignments through the learning portal by opening the module page and selecting the assignment upload link. Submit the final file as
+  3. handbook_late_2023:0:0 score=0.381 chars 0-263
+     Assessment Handbook, Section 4 (ARCHIVED version 2023, superseded, synthetic teaching text). This archived page is kept for students who started their programme before the current handbook was published. It should not be used for new modules, but it still appears
+
+Q [test] What proof do I need if I was sick and could not meet the deadline?  (expected: handbook_late)
+  1. handbook_late:0:2 score=0.493 chars 515-773
+     the deadline are treated as late submissions unless the student was admitted to hospital. Dr. Khan, the assessment officer, reviews medical evidence within three working days, e.g. a signed note from a registered clinic, and informs the student by university
+  2. handbook_late_2023:0:2 score=0.458 chars 473-715
+     zero. Students who were ill could apply for an extension within seven days after the deadline by sending a doctor's note to the department office. The department office replied by post or by telephone. Extensions under the archived rules were
+  3. handbook_late:0:1 score=0.400 chars 272-514  [RELEVANT]
+     is received. Late submission is penalized at 10% of the marks per day. However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline. Requests that arrive after
+
+Q [test] Who won the football match yesterday?  (expected: UNANSWERABLE)
+  1. handbook_late:0:2 score=0.078 chars 515-773
+     the deadline are treated as late submissions unless the student was admitted to hospital. Dr. Khan, the assessment officer, reviews medical evidence within three working days, e.g. a signed note from a registered clinic, and informs the student by university
+  2. remote_work:0:4 score=0.073 chars 1044-1140
+     allowed any staff member to work from home on Fridays were withdrawn and should not be followed.
+  3. printer_help:0:2 score=0.073 chars 481-713
+     the paper path and close the tray firmly. For a blank scanner image, check document placement on the glass and select the correct scanning source in the scanning software. Scanners in the lab use the flatbed source by default, while
+
+##### window-40/overlap-0 / tfidf
+
+Q [dev] What is the penalty for late work, and can illness give me an extension?  (expected: handbook_late)
+  1. handbook_late:0:1 score=0.340 chars 272-514  [RELEVANT]
+     is received. Late submission is penalized at 10% of the marks per day. However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline. Requests that arrive after
+  2. remote_work:0:1 score=0.249 chars 272-517
+     require them to be on campus. Contractors can work remotely only if the signed contract explicitly permits remote work; employee rules do not apply to contractors. A manager cannot approve remote work for a contractor when the contract is silent
+  3. handbook_late_2023:0:1 score=0.204 chars 264-472
+     in the old document library and in some search results. Under the 2023 rules, late work was accepted for up to three days with a deduction of 5% per day, and work submitted after three days received a mark of
+
+Q [dev] How do I reset a forgotten password?  (expected: it_password)
+  1. it_password:0:0 score=0.287 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+  2. it_password:0:4 score=0.124 chars 982-1152
+     end of the first week of term. Contact the desk at it-help@example.edu; do not send your password by email. The service desk is open from 9:00 to 17:00, Monday to Friday.
+  3. handbook_late:0:0 score=0.094 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+
+Q [dev] Where do I upload my assignment and which file format is required?  (expected: assignment_submission)
+  1. assignment_submission:0:0 score=0.362 chars 0-278
+     Assignment Submission Guide (synthetic teaching text). All coursework for CS4944 and other computing modules is handed in electronically. Upload assignments through the learning portal by opening the module page and selecting the assignment upload link. Submit the final file as
+  2. handbook_late_2023:0:3 score=0.147 chars 716-950
+     limited to a maximum of ten days, and a second extension for the same assignment was not allowed. Group projects were not eligible for extensions under the 2023 rules. Students who are unsure which version applies to them should check
+  3. handbook_late:0:0 score=0.126 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+
+Q [dev] Can contractors work remotely?  (expected: remote_work)
+  1. remote_work:0:1 score=0.481 chars 272-517  [RELEVANT]
+     require them to be on campus. Contractors can work remotely only if the signed contract explicitly permits remote work; employee rules do not apply to contractors. A manager cannot approve remote work for a contractor when the contract is silent
+  2. remote_work:0:0 score=0.169 chars 0-271
+     Workplace Policy: Remote Work (synthetic HR teaching text). This policy applies to employees and contractors who support university administration. Employees may request remote work for up to three days per week with written manager approval, provided their role does not
+  3. handbook_late_2023:0:1 score=0.111 chars 264-472
+     in the old document library and in some search results. Under the 2023 rules, late work was accepted for up to three days with a deduction of 5% per day, and work submitted after three days received a mark of
+
+Q [dev] What is the hostel fee for next semester?  (expected: UNANSWERABLE)
+  1. it_password:0:3 score=0.263 chars 732-981
+     Block C with your student card. Staff at the desk will verify your identity and issue a temporary password that must be changed at the next sign-in. Multi-factor authentication is mandatory for all accounts; register the authenticator app before the
+  2. handbook_late:0:1 score=0.158 chars 272-514
+     is received. Late submission is penalized at 10% of the marks per day. However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline. Requests that arrive after
+  3. printer_help:0:1 score=0.137 chars 258-480
+     printer menu, then print a test page afterwards. If the test page is still blank, replace the cartridge and repeat the cleaning utility once. For a paper jam, open the rear tray, remove the paper slowly in the direction of
+
+Q [test] The printer gives me empty pages, what should I do?  (expected: printer_help)
+  1. printer_help:0:0 score=0.240 chars 0-257
+     Equipment Troubleshooting: Lab Printers and Scanners (synthetic teaching text). Warning: switch the printer off and wait for the fuser to cool before opening any internal panel. For blank printer pages, check ink levels and run the cleaning utility from the
+  2. printer_help:0:3 score=0.155 chars 714-954
+     the automatic document feeder must be selected manually. Do not use printer cleaning steps on a scanner, because the two devices have different hardware. Report any device that shows an error code more than twice to the lab technician using
+  3. it_password:0:0 score=0.116 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+
+Q [test] How can I get back into my account if I forgot my login?  (expected: it_password)
+  1. it_password:0:0 score=0.265 chars 0-258
+     IT Help Guide: Account Access (synthetic teaching text). Your university account gives access to email, the learning portal, library services and campus Wi-Fi. If you forget your password, reset a forgotten password using the recovery link on the login page;
+  2. it_password:0:2 score=0.205 chars 515-731
+     attempts the account is locked for 15 minutes to protect it from guessing attacks. If the account is still locked after 15 minutes, or if you no longer have access to your personal email, visit the IT service desk in
+  3. remote_work:0:1 score=0.124 chars 272-517
+     require them to be on campus. Contractors can work remotely only if the signed contract explicitly permits remote work; employee rules do not apply to contractors. A manager cannot approve remote work for a contractor when the contract is silent
+
+Q [test] How should I hand in my coursework?  (expected: assignment_submission)
+  1. handbook_late:0:0 score=0.249 chars 0-271
+     Assessment Handbook, Section 4 (version 2026, synthetic teaching text). This section explains how coursework deadlines are managed in all undergraduate modules. Each assignment brief states a deadline date and time, and the learning portal records the exact moment a file
+  2. assignment_submission:0:0 score=0.121 chars 0-278  [RELEVANT]
+     Assignment Submission Guide (synthetic teaching text). All coursework for CS4944 and other computing modules is handed in electronically. Upload assignments through the learning portal by opening the module page and selecting the assignment upload link. Submit the final file as
+  3. remote_work:0:4 score=0.113 chars 1044-1140
+     allowed any staff member to work from home on Fridays were withdrawn and should not be followed.
+
+Q [test] What proof do I need if I was sick and could not meet the deadline?  (expected: handbook_late)
+  1. assignment_submission:0:2 score=0.147 chars 560-800
+     as a link to a GitHub repository together with the final commit identifier. The portal sends a confirmation receipt to your university email within a few minutes; keep this receipt as proof of submission. If the portal is unavailable within
+  2. handbook_late_2023:0:3 score=0.141 chars 716-950
+     limited to a maximum of ten days, and a second extension for the same assignment was not allowed. Group projects were not eligible for extensions under the 2023 rules. Students who are unsure which version applies to them should check
+  3. handbook_late_2023:0:2 score=0.140 chars 473-715
+     zero. Students who were ill could apply for an extension within seven days after the deadline by sending a doctor's note to the department office. The department office replied by post or by telephone. Extensions under the archived rules were
+
+Q [test] Who won the football match yesterday?  (expected: UNANSWERABLE)
+  1. handbook_late_2023:0:2 score=0.186 chars 473-715
+     zero. Students who were ill could apply for an extension within seven days after the deadline by sending a doctor's note to the department office. The department office replied by post or by telephone. Extensions under the archived rules were
+  2. handbook_late_2023:0:3 score=0.174 chars 716-950
+     limited to a maximum of ten days, and a second extension for the same assignment was not allowed. Group projects were not eligible for extensions under the 2023 rules. Students who are unsure which version applies to them should check
+  3. remote_work:0:3 score=0.156 chars 785-1043
+     states otherwise. Remote work may be withdrawn during examination periods, when additional staff are needed on campus. Questions about eligibility should be sent to the HR policy owner, who keeps the current version of this policy. Older team guidelines that
+
+================ FIRST RELEVANT RANK PER QUERY (- = miss in top 3) ================
+split  query                                                        0/tfi  0/emb  10/tfi 10/emb sent/tfi sent/emb
+dev    What is the penalty for late work, and can illness give me a 1      1      -      -      -      -     
+dev    How do I reset a forgotten password?                         -      -      -      -      1      1     
+dev    Where do I upload my assignment and which file format is req -      -      -      -      -      -     
+dev    Can contractors work remotely?                               1      1      1      2      1      1     
+test   The printer gives me empty pages, what should I do?          -      -      -      -      1      1     
+test   How can I get back into my account if I forgot my login?     -      -      -      -      3      1     
+test   How should I hand in my coursework?                          2      2      2      2      3      2     
+test   What proof do I need if I was sick and could not meet the de -      3      -      -      -      1     
+
+================ UNANSWERABLE QUERIES (reported separately) ================
+  window-40/overlap-0    tfidf     'What is the hostel fee for next semester?': top-1 it_password:0:3 score=0.263
+  window-40/overlap-0    tfidf     'Who won the football match yesterday?': top-1 handbook_late_2023:0:2 score=0.186
+  window-40/overlap-0    embedding 'What is the hostel fee for next semester?': top-1 handbook_late:0:0 score=0.294
+  window-40/overlap-0    embedding 'Who won the football match yesterday?': top-1 handbook_late:0:2 score=0.078
+  window-40/overlap-10   tfidf     'What is the hostel fee for next semester?': top-1 it_password:10:4 score=0.266
+  window-40/overlap-10   tfidf     'Who won the football match yesterday?': top-1 handbook_late_2023:10:5 score=0.195
+  window-40/overlap-10   embedding 'What is the hostel fee for next semester?': top-1 handbook_late:10:0 score=0.294
+  window-40/overlap-10   embedding 'Who won the football match yesterday?': top-1 handbook_late:10:3 score=0.117
+  sentence-40            tfidf     'What is the hostel fee for next semester?': top-1 it_password:sentence:4 score=0.242
+  sentence-40            tfidf     'Who won the football match yesterday?': top-1 handbook_late_2023:sentence:5 score=0.193
+  sentence-40            embedding 'What is the hostel fee for next semester?': top-1 handbook_late:sentence:0 score=0.336
+  sentence-40            embedding 'Who won the football match yesterday?': top-1 it_password:sentence:6 score=0.105
+
+================ FAILURES (answerable, relevant chunk not at rank 1) ==========
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'How do I reset a forgotten password?', 'split': 'dev', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:0:0', 'top1_score': 0.287}
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:0:0', 'top1_score': 0.362}
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'The printer gives me empty pages, what should I do?', 'split': 'test', 'expected_doc': 'printer_help', 'first_relevant_rank': None, 'top1': 'printer_help:0:0', 'top1_score': 0.24}
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'How can I get back into my account if I forgot my login?', 'split': 'test', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:0:0', 'top1_score': 0.265}
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 2, 'top1': 'handbook_late:0:0', 'top1_score': 0.249}
+   {'strategy': 'window-40/overlap-0', 'method': 'tfidf', 'query': 'What proof do I need if I was sick and could not meet the deadline?', 'split': 'test', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'assignment_submission:0:2', 'top1_score': 0.147}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'How do I reset a forgotten password?', 'split': 'dev', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:0:0', 'top1_score': 0.554}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:0:0', 'top1_score': 0.536}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'The printer gives me empty pages, what should I do?', 'split': 'test', 'expected_doc': 'printer_help', 'first_relevant_rank': None, 'top1': 'printer_help:0:1', 'top1_score': 0.711}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'How can I get back into my account if I forgot my login?', 'split': 'test', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:0:0', 'top1_score': 0.543}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 2, 'top1': 'handbook_late:0:0', 'top1_score': 0.451}
+   {'strategy': 'window-40/overlap-0', 'method': 'embedding', 'query': 'What proof do I need if I was sick and could not meet the deadline?', 'split': 'test', 'expected_doc': 'handbook_late', 'first_relevant_rank': 3, 'top1': 'handbook_late:0:2', 'top1_score': 0.493}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'What is the penalty for late work, and can illness give me an extension?', 'split': 'dev', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late:10:1', 'top1_score': 0.357}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'How do I reset a forgotten password?', 'split': 'dev', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:10:0', 'top1_score': 0.279}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:10:0', 'top1_score': 0.343}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'The printer gives me empty pages, what should I do?', 'split': 'test', 'expected_doc': 'printer_help', 'first_relevant_rank': None, 'top1': 'printer_help:10:0', 'top1_score': 0.249}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'How can I get back into my account if I forgot my login?', 'split': 'test', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:10:0', 'top1_score': 0.24}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 2, 'top1': 'handbook_late:10:0', 'top1_score': 0.262}
+   {'strategy': 'window-40/overlap-10', 'method': 'tfidf', 'query': 'What proof do I need if I was sick and could not meet the deadline?', 'split': 'test', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late:10:2', 'top1_score': 0.196}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'What is the penalty for late work, and can illness give me an extension?', 'split': 'dev', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late_2023:10:2', 'top1_score': 0.654}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'How do I reset a forgotten password?', 'split': 'dev', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:10:1', 'top1_score': 0.619}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:10:1', 'top1_score': 0.611}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'Can contractors work remotely?', 'split': 'dev', 'expected_doc': 'remote_work', 'first_relevant_rank': 2, 'top1': 'remote_work:10:2', 'top1_score': 0.65}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'The printer gives me empty pages, what should I do?', 'split': 'test', 'expected_doc': 'printer_help', 'first_relevant_rank': None, 'top1': 'printer_help:10:1', 'top1_score': 0.711}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'How can I get back into my account if I forgot my login?', 'split': 'test', 'expected_doc': 'it_password', 'first_relevant_rank': None, 'top1': 'it_password:10:1', 'top1_score': 0.563}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 2, 'top1': 'handbook_late:10:0', 'top1_score': 0.451}
+   {'strategy': 'window-40/overlap-10', 'method': 'embedding', 'query': 'What proof do I need if I was sick and could not meet the deadline?', 'split': 'test', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late_2023:10:2', 'top1_score': 0.535}
+   {'strategy': 'sentence-40', 'method': 'tfidf', 'query': 'What is the penalty for late work, and can illness give me an extension?', 'split': 'dev', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late:sentence:2', 'top1_score': 0.33}
+   {'strategy': 'sentence-40', 'method': 'tfidf', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:sentence:0', 'top1_score': 0.336}
+   {'strategy': 'sentence-40', 'method': 'tfidf', 'query': 'How can I get back into my account if I forgot my login?', 'split': 'test', 'expected_doc': 'it_password', 'first_relevant_rank': 3, 'top1': 'it_password:sentence:3', 'top1_score': 0.176}
+   {'strategy': 'sentence-40', 'method': 'tfidf', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 3, 'top1': 'handbook_late:sentence:0', 'top1_score': 0.323}
+   {'strategy': 'sentence-40', 'method': 'tfidf', 'query': 'What proof do I need if I was sick and could not meet the deadline?', 'split': 'test', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'assignment_submission:sentence:3', 'top1_score': 0.159}
+   {'strategy': 'sentence-40', 'method': 'embedding', 'query': 'What is the penalty for late work, and can illness give me an extension?', 'split': 'dev', 'expected_doc': 'handbook_late', 'first_relevant_rank': None, 'top1': 'handbook_late_2023:sentence:2', 'top1_score': 0.558}
+   {'strategy': 'sentence-40', 'method': 'embedding', 'query': 'Where do I upload my assignment and which file format is required?', 'split': 'dev', 'expected_doc': 'assignment_submission', 'first_relevant_rank': None, 'top1': 'assignment_submission:sentence:0', 'top1_score': 0.509}
+   {'strategy': 'sentence-40', 'method': 'embedding', 'query': 'How should I hand in my coursework?', 'split': 'test', 'expected_doc': 'assignment_submission', 'first_relevant_rank': 2, 'top1': 'handbook_late:sentence:0', 'top1_score': 0.464}
+
+Wrote to outputs/: retrieval_log.csv ( 180 rows ), results_summary.csv, failures.json, selected_config.json

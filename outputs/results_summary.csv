@@ -1,0 +1,7 @@
+strategy,method,chunks,encode_seconds,search_seconds,dev_hit3,dev_mrr3,test_hit3,test_mrr3
+window-40/overlap-0,tfidf,31,0.0043,0.000208,0.5,0.5,0.25,0.125
+window-40/overlap-0,embedding,31,0.1169,6.2e-05,0.5,0.5,0.5,0.208
+window-40/overlap-10,tfidf,39,0.0025,0.000161,0.25,0.25,0.25,0.125
+window-40/overlap-10,embedding,39,0.1077,4.6e-05,0.25,0.125,0.25,0.125
+sentence-40,tfidf,39,0.0024,0.000167,0.5,0.5,0.75,0.417
+sentence-40,embedding,39,0.0912,4.4e-05,0.5,0.5,1.0,0.875

@@ -1,0 +1,352 @@
+[
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "How do I reset a forgotten password?",
+    "split": "dev",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:0:0",
+    "top1_score": 0.287
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:0:0",
+    "top1_score": 0.362
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "The printer gives me empty pages, what should I do?",
+    "split": "test",
+    "expected_doc": "printer_help",
+    "first_relevant_rank": null,
+    "top1": "printer_help:0:0",
+    "top1_score": 0.24
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "How can I get back into my account if I forgot my login?",
+    "split": "test",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:0:0",
+    "top1_score": 0.265
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 2,
+    "top1": "handbook_late:0:0",
+    "top1_score": 0.249
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "tfidf",
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "split": "test",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:0:2",
+    "top1_score": 0.147
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "How do I reset a forgotten password?",
+    "split": "dev",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:0:0",
+    "top1_score": 0.554
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:0:0",
+    "top1_score": 0.536
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "The printer gives me empty pages, what should I do?",
+    "split": "test",
+    "expected_doc": "printer_help",
+    "first_relevant_rank": null,
+    "top1": "printer_help:0:1",
+    "top1_score": 0.711
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "How can I get back into my account if I forgot my login?",
+    "split": "test",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:0:0",
+    "top1_score": 0.543
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 2,
+    "top1": "handbook_late:0:0",
+    "top1_score": 0.451
+  },
+  {
+    "strategy": "window-40/overlap-0",
+    "method": "embedding",
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "split": "test",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": 3,
+    "top1": "handbook_late:0:2",
+    "top1_score": 0.493
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "What is the penalty for late work, and can illness give me an extension?",
+    "split": "dev",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late:10:1",
+    "top1_score": 0.357
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "How do I reset a forgotten password?",
+    "split": "dev",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:10:0",
+    "top1_score": 0.279
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:10:0",
+    "top1_score": 0.343
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "The printer gives me empty pages, what should I do?",
+    "split": "test",
+    "expected_doc": "printer_help",
+    "first_relevant_rank": null,
+    "top1": "printer_help:10:0",
+    "top1_score": 0.249
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "How can I get back into my account if I forgot my login?",
+    "split": "test",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:10:0",
+    "top1_score": 0.24
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 2,
+    "top1": "handbook_late:10:0",
+    "top1_score": 0.262
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "tfidf",
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "split": "test",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late:10:2",
+    "top1_score": 0.196
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "What is the penalty for late work, and can illness give me an extension?",
+    "split": "dev",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late_2023:10:2",
+    "top1_score": 0.654
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "How do I reset a forgotten password?",
+    "split": "dev",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:10:1",
+    "top1_score": 0.619
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:10:1",
+    "top1_score": 0.611
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "Can contractors work remotely?",
+    "split": "dev",
+    "expected_doc": "remote_work",
+    "first_relevant_rank": 2,
+    "top1": "remote_work:10:2",
+    "top1_score": 0.65
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "The printer gives me empty pages, what should I do?",
+    "split": "test",
+    "expected_doc": "printer_help",
+    "first_relevant_rank": null,
+    "top1": "printer_help:10:1",
+    "top1_score": 0.711
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "How can I get back into my account if I forgot my login?",
+    "split": "test",
+    "expected_doc": "it_password",
+    "first_relevant_rank": null,
+    "top1": "it_password:10:1",
+    "top1_score": 0.563
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 2,
+    "top1": "handbook_late:10:0",
+    "top1_score": 0.451
+  },
+  {
+    "strategy": "window-40/overlap-10",
+    "method": "embedding",
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "split": "test",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late_2023:10:2",
+    "top1_score": 0.535
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "tfidf",
+    "query": "What is the penalty for late work, and can illness give me an extension?",
+    "split": "dev",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late:sentence:2",
+    "top1_score": 0.33
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "tfidf",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:sentence:0",
+    "top1_score": 0.336
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "tfidf",
+    "query": "How can I get back into my account if I forgot my login?",
+    "split": "test",
+    "expected_doc": "it_password",
+    "first_relevant_rank": 3,
+    "top1": "it_password:sentence:3",
+    "top1_score": 0.176
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "tfidf",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 3,
+    "top1": "handbook_late:sentence:0",
+    "top1_score": 0.323
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "tfidf",
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "split": "test",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:sentence:3",
+    "top1_score": 0.159
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "embedding",
+    "query": "What is the penalty for late work, and can illness give me an extension?",
+    "split": "dev",
+    "expected_doc": "handbook_late",
+    "first_relevant_rank": null,
+    "top1": "handbook_late_2023:sentence:2",
+    "top1_score": 0.558
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "embedding",
+    "query": "Where do I upload my assignment and which file format is required?",
+    "split": "dev",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": null,
+    "top1": "assignment_submission:sentence:0",
+    "top1_score": 0.509
+  },
+  {
+    "strategy": "sentence-40",
+    "method": "embedding",
+    "query": "How should I hand in my coursework?",
+    "split": "test",
+    "expected_doc": "assignment_submission",
+    "first_relevant_rank": 2,
+    "top1": "handbook_late:sentence:0",
+    "top1_score": 0.464
+  }
+]
