@@ -1,0 +1,62 @@
+[
+  {
+    "query": "What is the penalty for late work, and can illness give me an extension?",
+    "doc": "handbook_late",
+    "evidence": "Late submission is penalized at 10% of the marks per day. However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline.",
+    "split": "dev"
+  },
+  {
+    "query": "How do I reset a forgotten password?",
+    "doc": "it_password",
+    "evidence": "reset a forgotten password using the recovery link on the login page; the link is sent to the personal email address registered during enrolment and expires after 30 minutes.",
+    "split": "dev"
+  },
+  {
+    "query": "Where do I upload my assignment and which file format is required?",
+    "doc": "assignment_submission",
+    "evidence": "Upload assignments through the learning portal by opening the module page and selecting the assignment upload link. Submit the final file as a single PDF no larger than 20 MB",
+    "split": "dev"
+  },
+  {
+    "query": "Can contractors work remotely?",
+    "doc": "remote_work",
+    "evidence": "Contractors can work remotely only if the signed contract explicitly permits remote work; employee rules do not apply to contractors.",
+    "split": "dev"
+  },
+  {
+    "query": "What is the hostel fee for next semester?",
+    "doc": null,
+    "evidence": null,
+    "split": "dev"
+  },
+  {
+    "query": "The printer gives me empty pages, what should I do?",
+    "doc": "printer_help",
+    "evidence": "For blank printer pages, check ink levels and run the cleaning utility from the printer menu, then print a test page afterwards.",
+    "split": "test"
+  },
+  {
+    "query": "How can I get back into my account if I forgot my login?",
+    "doc": "it_password",
+    "evidence": "reset a forgotten password using the recovery link on the login page; the link is sent to the personal email address registered during enrolment and expires after 30 minutes.",
+    "split": "test"
+  },
+  {
+    "query": "How should I hand in my coursework?",
+    "doc": "assignment_submission",
+    "evidence": "Upload assignments through the learning portal by opening the module page and selecting the assignment upload link.",
+    "split": "test"
+  },
+  {
+    "query": "What proof do I need if I was sick and could not meet the deadline?",
+    "doc": "handbook_late",
+    "evidence": "However, a student with a documented illness may request an extension if medical evidence is sent to the module coordinator before the deadline.",
+    "split": "test"
+  },
+  {
+    "query": "Who won the football match yesterday?",
+    "doc": null,
+    "evidence": null,
+    "split": "test"
+  }
+]
